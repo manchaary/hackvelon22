@@ -2,7 +2,7 @@
   import "/node_modules/flag-icons/css/flag-icons.min.css";
   import "./app.scss";
   import { parse, format } from 'date-fns';
-  import { getPrediction } from './api/client';
+  import { getPrediction, getTeams } from './api/client';
   import PredictionCard from "./components/PredictionCard/PredictionCard.svelte";
   import Mascot from './components/Mascot/Mascot.svelte';
   import { getCountryFlagCode } from './utils/getCountryFlagCode';
@@ -79,11 +79,13 @@
   let winnerTeam: string | null = null;
   let prediction = null;
   let isLoading = false;
+
   const dates = Object.keys(d).sort((a, b) => {
     const dateA = parse(a, dateFormat, new Date());
     const dateB = parse(b, dateFormat, new Date());
     return dateB.getTime() - dateA.getTime();
   });
+
   const getPrediciton = async () => {
     isLoading = true;
     prediction = await getPrediction(`${teamA},${teamB}`);

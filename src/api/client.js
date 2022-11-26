@@ -5,7 +5,7 @@ const instance = axios.create({
 });
 
 export const getTeams = async () =>
-  await instance.get("get_teams").then((res) => res.data);
+  await instance.get("/predict/teams").then((res) => res.data);
 
 export const getPrediction = async (teams) =>
-  await instance.get(`predict/football/${teams}`).then((res) => res.data);
+  await instance.get(`/predict/football/${teams}`).then((res) => res.data);
