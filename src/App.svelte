@@ -2,76 +2,192 @@
   import "/node_modules/flag-icons/css/flag-icons.min.css";
   import "./app.scss";
   import { parse, format } from 'date-fns';
-  import { getPrediction, getTeams } from './api/client';
+  import { getMatches, getPrediction, getTeams } from './api/client';
   import PredictionCard from "./components/PredictionCard/PredictionCard.svelte";
   import Mascot from './components/Mascot/Mascot.svelte';
   import { getCountryFlagCode } from './utils/getCountryFlagCode';
   const d = {
-    "2022-11-20": [
-      {
-        "Date": "2022-11-20",
-        "Time": "19:00:00",
-        "Team_1": "Qatar",
-        "Team_2": "Ecuador",
-        "Score": "0:2",
-        "winnerTeam": "Qatar",
-        "probability": [
-          0.40057951016496657,
-          0.5994204898350335
-        ]
-      }
+    "2022-11-29": [
+        {
+            "Date": "2022-11-29",
+            "Time": "22:00:00",
+            "Team_1": "Wales",
+            "Team_2": "England",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        },
+        {
+            "Date": "2022-11-29",
+            "Time": "22:00:00",
+            "Team_1": "Iran",
+            "Team_2": "United States",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        }
     ],
-    "2022-11-21": [
-      {
-        "Date": "2022-11-21",
-        "Time": "16:00:00",
-        "Team_1": "England",
-        "Team_2": "Iran",
-        "Score": "6:2",
-        "winnerTeam": "England",
-        "probability": [
-          0.5995235034676869,
-          0.4004764965323131
-        ]
-      },
-      {
-        "Date": "2022-11-21",
-        "Time": "22:00:00",
-        "Team_1": "United States",
-        "Team_2": "Wales",
-        "Score": "1:1",
-        "winnerTeam": "United States",
-        "probability": [
-          0.49439575031852245,
-          0.5056042496814775
-        ]
-      }
+    "2022-11-22": [
+        {
+            "Date": "2022-11-22",
+            "Time": "16:00:00",
+            "Team_1": "Denmark",
+            "Team_2": "Tunisia",
+            "Score": "0:0",
+            "winnerTeam": "Draw",
+            "probability": [
+                0.6333990153340511,
+                0.3666009846659489
+            ]
+        },
+        {
+            "Date": "2022-11-22",
+            "Time": "22:00:00",
+            "Team_1": "France",
+            "Team_2": "Australia",
+            "Score": "4:1",
+            "winnerTeam": "France",
+            "probability": [
+                0.6499395282476277,
+                0.3500604717523723
+            ]
+        }
     ],
-    "2022-11-25": [
-      {
-        "Date": "2022-11-25",
-        "Time": "13:00:00",
-        "Team_1": "Wales",
-        "Team_2": "Iran",
-        "Score": "0:2",
-        "winnerTeam": "Wales",
-        "probability": [
-          0.5351567084447584,
-          0.46484329155524157
-        ]
-      },
-      {
-        "Date": "2022-11-25",
-        "Time": "22:00:00",
-        "Team_1": "England",
-        "Team_2": "United States",
-        "Score": null,
-        "winnerTeam": null,
-        "probability": 0
-      }
+    "2022-11-26": [
+        {
+            "Date": "2022-11-26",
+            "Time": "13:00:00",
+            "Team_1": "Tunisia",
+            "Team_2": "Australia",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        },
+        {
+            "Date": "2022-11-26",
+            "Time": "19:00:00",
+            "Team_1": "France",
+            "Team_2": "Denmark",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        }
     ],
-  }
+    "2022-11-30": [
+        {
+            "Date": "2022-11-30",
+            "Time": "18:00:00",
+            "Team_1": "Australia",
+            "Team_2": "Denmark",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        },
+        {
+            "Date": "2022-11-30",
+            "Time": "18:00:00",
+            "Team_1": "Tunisia",
+            "Team_2": "France",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        }
+    ],
+    "2022-11-23": [
+        {
+            "Date": "2022-11-23",
+            "Time": "13:00:00",
+            "Team_1": "Morocco",
+            "Team_2": "Croatia",
+            "Score": "0:0",
+            "winnerTeam": "Draw",
+            "probability": [
+                0.42008367935433066,
+                0.5799163206456693
+            ]
+        },
+        {
+            "Date": "2022-11-23",
+            "Time": "22:00:00",
+            "Team_1": "Belgium",
+            "Team_2": "Canada",
+            "Score": "1:0",
+            "winnerTeam": "Belgium",
+            "probability": [
+                0.6712735625796881,
+                0.32872643742031193
+            ]
+        }
+    ],
+    "2022-11-27": [
+        {
+            "Date": "2022-11-27",
+            "Time": "16:00:00",
+            "Team_1": "Belgium",
+            "Team_2": "Morocco",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        },
+        {
+            "Date": "2022-11-27",
+            "Time": "19:00:00",
+            "Team_1": "Croatia",
+            "Team_2": "Canada",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        }
+    ],
+    "2022-11-24": [
+        {
+            "Date": "2022-11-24",
+            "Time": "16:00:00",
+            "Team_1": "Uruguay",
+            "Team_2": "South Korea",
+            "Score": "0:0",
+            "winnerTeam": "Draw",
+            "probability": [
+                0.6030381854357063,
+                0.3969618145642936
+            ]
+        },
+        {
+            "Date": "2022-11-24",
+            "Time": "19:00:00",
+            "Team_1": "Portugal",
+            "Team_2": "Ghana",
+            "Score": "3:2",
+            "winnerTeam": "Portugal",
+            "probability": [
+                0.7137601990641673,
+                0.28623980093583273
+            ]
+        }
+    ],
+    "2022-11-28": [
+        {
+            "Date": "2022-11-28",
+            "Time": "16:00:00",
+            "Team_1": "South Korea",
+            "Team_2": "Ghana",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        },
+        {
+            "Date": "2022-11-28",
+            "Time": "22:00:00",
+            "Team_1": "Portugal",
+            "Team_2": "Uruguay",
+            "Score": null,
+            "winnerTeam": null,
+            "probability": 0
+        }
+    ]
+}
   const dateFormat = "yyyy-MM-dd";
+  let matches = getMatches();
   let teamA = null;
   let teamB = null;
   let stadium = null;
@@ -79,12 +195,22 @@
   let winnerTeam: string | null = null;
   let prediction = null;
   let isLoading = false;
+  let data = null;
+  let dates = Object.keys(d).sort((a, b) => {
+      const dateA = parse(a, dateFormat, new Date());
+      const dateB = parse(b, dateFormat, new Date());
+      return dateB.getTime() - dateA.getTime();
+    });;
 
-  const dates = Object.keys(d).sort((a, b) => {
-    const dateA = parse(a, dateFormat, new Date());
-    const dateB = parse(b, dateFormat, new Date());
-    return dateB.getTime() - dateA.getTime();
-  });
+  const setData = async () => {
+    data = await getMatches();
+    console.log(data);
+    dates = Object.keys(dates).sort((a, b) => {
+      const dateA = parse(a, dateFormat, new Date());
+      const dateB = parse(b, dateFormat, new Date());
+      return dateB.getTime() - dateA.getTime();
+    });
+  }
 
   const getPrediciton = async () => {
     isLoading = true;
@@ -114,28 +240,30 @@
     />
   </div>
   <Mascot winnerCountry={winnerTeam} isLoading={isLoading} />
-  <div class="grid">
-    {#each dates as date}
-      <div class="grid-item">
-        <div>{format(parse(date, dateFormat, new Date()), 'eee, MMM d')}</div>
-        <div class="grid-item-matches">
-          {#each d[date] as item}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="match-item" on:click={() => setTeams(item.Team_1, item.Team_2)}>
-              <div class="scorelist-item">
-                <span class="fi fi-{getCountryFlagCode(item.Team_1)}"></span>
-                {item.Team_1}
+  {#if dates}
+    <div class="grid">
+      {#each dates as date}
+        <div class="grid-item">
+          <div>{format(parse(date, dateFormat, new Date()), 'eee, MMM d')}</div>
+          <div class="grid-item-matches">
+            {#each d[date] as item}
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <div class="match-item" on:click={() => setTeams(item.Team_1, item.Team_2)}>
+                <div class="scorelist-item">
+                  <span class="fi fi-{getCountryFlagCode(item.Team_1)}"></span>
+                  {item.Team_1}
+                </div>
+                <div class="scorelist-item">
+                  <span class="fi fi-{getCountryFlagCode(item.Team_2)}"></span>
+                  {item.Team_2}
+                </div>
               </div>
-              <div class="scorelist-item">
-                <span class="fi fi-{getCountryFlagCode(item.Team_2)}"></span>
-                {item.Team_2}
-              </div>
-            </div>
-          {/each}
+            {/each}
+          </div>
         </div>
-      </div>
-    {/each}
-  </div>
+      {/each}
+    </div>
+  {/if}
 </main>
 
 <style lang="scss">

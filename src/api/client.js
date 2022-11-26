@@ -9,3 +9,6 @@ export const getTeams = async () =>
 
 export const getPrediction = async (teams) =>
   await instance.get(`/predict/football/${teams}`).then((res) => res.data);
+
+export const getMatches = async () =>
+  await instance.get(`/get_dates`).then((res) => res.data);
