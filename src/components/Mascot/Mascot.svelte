@@ -6,12 +6,11 @@
   function generateRandomInteger(min, max) {
     return Math.floor(min + Math.random()*(max - min + 1))
   }
-  const imageBase = import.meta.env.VITE_IMAGE_BASE_URL;
   const imageSrc = [
-    "static/images/mascot/Vadim_ball_happy.png",
-    "static/images/mascot/Vadim_ball_cheering.png",
+    "/static/images/mascot/Vadim_ball_happy.png",
+    "/static/images/mascot/Vadim_ball_cheering.png",
   ];
-  let predictedImage = `${imageBase}${imageSrc[generateRandomInteger(0,1)]}`;
+  let predictedImage = imageSrc[generateRandomInteger(0,1)];
 </script>
 
 <div class="mascot">
@@ -25,12 +24,12 @@
       {:else}
         <span class="mascot-bubble-text">Let's predict a winner!</span>
       {/if}
-      <img class="mascot-bubble-img" src={`${imageBase}static/images/mascot/Buble.png`} alt="Mascot" />
+      <img class="mascot-bubble-img" src="/static/images/mascot/Buble.png" alt="Mascot" />
     </div>
     {#if winnerCountry && !isLoading}
       <img class="mascot-img predicted" src={predictedImage} alt="Mascot" />
     {:else}
-      <img class="mascot-img" src={`${imageBase}static/images/mascot/Vadim_ball.png`} alt="Mascot" />
+      <img class="mascot-img" src="/static/images/mascot/Vadim_ball.png" alt="Mascot" />
     {/if}
   </div>
 </div>
