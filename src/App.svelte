@@ -215,7 +215,8 @@
   const getPrediciton = async () => {
     isLoading = true;
     prediction = await getPrediction(`${teamA},${teamB}`);
-    winnerTeam = prediction[0].team1Name;
+    const { team1Prediction, team2Prediction, team1Name, team2Name } = prediction[0];
+    winnerTeam = team1Prediction > team2Prediction ? team1Name : team2Name;
     isLoading = false;
   };
   const setTeams = (team1, team2) => {

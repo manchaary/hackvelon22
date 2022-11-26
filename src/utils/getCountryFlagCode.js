@@ -17,7 +17,7 @@ const isoMap = {
   India: "in",
   Germany: "de",
   "Czech Republic": "cz",
-  Wales: "gb",
+  Wales: "gb-wls",
   Norway: "no",
   Slovenia: "si",
   Kazakhstan: "kz",
