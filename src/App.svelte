@@ -1,191 +1,14 @@
 <script lang="ts">
   import "/node_modules/flag-icons/css/flag-icons.min.css";
   import "./app.scss";
-  import { parse, format } from 'date-fns';
+  import { parse, format, isToday } from 'date-fns';
+  import Carousel from 'svelte-carousel'
+
   import { getMatches, getPrediction, getTeams } from './api/client';
   import PredictionCard from "./components/PredictionCard/PredictionCard.svelte";
   import Mascot from './components/Mascot/Mascot.svelte';
   import { getCountryFlagCode } from './utils/getCountryFlagCode';
-  const d = {
-    "2022-11-29": [
-        {
-            "Date": "2022-11-29",
-            "Time": "22:00:00",
-            "Team_1": "Wales",
-            "Team_2": "England",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        },
-        {
-            "Date": "2022-11-29",
-            "Time": "22:00:00",
-            "Team_1": "Iran",
-            "Team_2": "United States",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        }
-    ],
-    "2022-11-22": [
-        {
-            "Date": "2022-11-22",
-            "Time": "16:00:00",
-            "Team_1": "Denmark",
-            "Team_2": "Tunisia",
-            "Score": "0:0",
-            "winnerTeam": "Draw",
-            "probability": [
-                0.6333990153340511,
-                0.3666009846659489
-            ]
-        },
-        {
-            "Date": "2022-11-22",
-            "Time": "22:00:00",
-            "Team_1": "France",
-            "Team_2": "Australia",
-            "Score": "4:1",
-            "winnerTeam": "France",
-            "probability": [
-                0.6499395282476277,
-                0.3500604717523723
-            ]
-        }
-    ],
-    "2022-11-26": [
-        {
-            "Date": "2022-11-26",
-            "Time": "13:00:00",
-            "Team_1": "Tunisia",
-            "Team_2": "Australia",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        },
-        {
-            "Date": "2022-11-26",
-            "Time": "19:00:00",
-            "Team_1": "France",
-            "Team_2": "Denmark",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        }
-    ],
-    "2022-11-30": [
-        {
-            "Date": "2022-11-30",
-            "Time": "18:00:00",
-            "Team_1": "Australia",
-            "Team_2": "Denmark",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        },
-        {
-            "Date": "2022-11-30",
-            "Time": "18:00:00",
-            "Team_1": "Tunisia",
-            "Team_2": "France",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        }
-    ],
-    "2022-11-23": [
-        {
-            "Date": "2022-11-23",
-            "Time": "13:00:00",
-            "Team_1": "Morocco",
-            "Team_2": "Croatia",
-            "Score": "0:0",
-            "winnerTeam": "Draw",
-            "probability": [
-                0.42008367935433066,
-                0.5799163206456693
-            ]
-        },
-        {
-            "Date": "2022-11-23",
-            "Time": "22:00:00",
-            "Team_1": "Belgium",
-            "Team_2": "Canada",
-            "Score": "1:0",
-            "winnerTeam": "Belgium",
-            "probability": [
-                0.6712735625796881,
-                0.32872643742031193
-            ]
-        }
-    ],
-    "2022-11-27": [
-        {
-            "Date": "2022-11-27",
-            "Time": "16:00:00",
-            "Team_1": "Belgium",
-            "Team_2": "Morocco",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        },
-        {
-            "Date": "2022-11-27",
-            "Time": "19:00:00",
-            "Team_1": "Croatia",
-            "Team_2": "Canada",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        }
-    ],
-    "2022-11-24": [
-        {
-            "Date": "2022-11-24",
-            "Time": "16:00:00",
-            "Team_1": "Uruguay",
-            "Team_2": "South Korea",
-            "Score": "0:0",
-            "winnerTeam": "Draw",
-            "probability": [
-                0.6030381854357063,
-                0.3969618145642936
-            ]
-        },
-        {
-            "Date": "2022-11-24",
-            "Time": "19:00:00",
-            "Team_1": "Portugal",
-            "Team_2": "Ghana",
-            "Score": "3:2",
-            "winnerTeam": "Portugal",
-            "probability": [
-                0.7137601990641673,
-                0.28623980093583273
-            ]
-        }
-    ],
-    "2022-11-28": [
-        {
-            "Date": "2022-11-28",
-            "Time": "16:00:00",
-            "Team_1": "South Korea",
-            "Team_2": "Ghana",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        },
-        {
-            "Date": "2022-11-28",
-            "Time": "22:00:00",
-            "Team_1": "Portugal",
-            "Team_2": "Uruguay",
-            "Score": null,
-            "winnerTeam": null,
-            "probability": 0
-        }
-    ]
-}
+
   const dateFormat = "yyyy-MM-dd";
   let matches = getMatches();
   let teamA = null;
@@ -195,22 +18,20 @@
   let winnerTeam: string | null = null;
   let prediction = null;
   let isLoading = false;
-  let dates = Object.keys(d).sort((a, b) => {
+  let dataPromise = getMatches();
+
+  const getDates = (data) => {
+    const dates = Object.keys(data).sort((a, b) => {
       const dateA = parse(a, dateFormat, new Date());
       const dateB = parse(b, dateFormat, new Date());
-      return dateB.getTime() - dateA.getTime();
-    });;
-    
-  let data = getMatches();
-  const setData = async () => {
-    console.log(data);
-    dates = Object.keys(dates).sort((a, b) => {
-      const dateA = parse(a, dateFormat, new Date());
-      const dateB = parse(b, dateFormat, new Date());
-      return dateB.getTime() - dateA.getTime();
+      return dateA.getTime() - dateB.getTime();
     });
+    const todayIndex = dates.findIndex((value) => value === format(new Date(), 'yyyy-MM-dd'));
+    const end = todayIndex + 7;
+    const start = todayIndex - 2;
+    return dates.slice(start, end);
   }
-  console.log(data);
+
   const getPrediciton = async () => {
     isLoading = true;
     prediction = await getPrediction(`${teamA},${teamB}`);
@@ -222,6 +43,7 @@
     teamA = team1;
     teamB = team2;
     prediction = null;
+    winnerTeam = null;
   }
 </script>
 
@@ -240,42 +62,54 @@
     />
   </div>
   <Mascot winnerCountry={winnerTeam} isLoading={isLoading} />
-  {#if dates}
-    <div class="grid">
-      {#each dates as date}
-        <div class="grid-item">
-          <div>{format(parse(date, dateFormat, new Date()), 'eee, MMM d')}</div>
-          <div class="grid-item-matches">
-            {#each d[date] as item}
-              <!-- svelte-ignore a11y-click-events-have-key-events -->
-              <div class="match-item" on:click={() => setTeams(item.Team_1, item.Team_2)}>
-                <div class="scorelist-item">
-                  <span class="fi fi-{getCountryFlagCode(item.Team_1)}"></span>
-                  {item.Team_1}
+  {#await dataPromise}
+    <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  {:then data}
+  <div class="grid">
+    <Carousel initialPageIndex={2}>
+        {#each getDates(data) as date}
+          <div class="grid-item">
+            <div>{format(parse(date, dateFormat, new Date()), 'eee, MMM d')}</div>
+            <div class="grid-item-matches">
+              {#each data[date] as item}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="match-item" on:click={() => setTeams(item.Team_1, item.Team_2)}>
+                  <div>
+                    <div class="scorelist-item">
+                      <div>
+                        <span class="fi fi-{getCountryFlagCode(item.Team_1)}"></span>
+                        {item.Team_1}
+                      </div>
+                    </div>
+                    <div class="scorelist-item">
+                      <span class="fi fi-{getCountryFlagCode(item.Team_2)}"></span>
+                      {item.Team_2}
+                    </div>
+                  </div>
+                  {#if item.Score}
+                    <div class="match-score">{item.Score}</div>
+                  {/if}
                 </div>
-                <div class="scorelist-item">
-                  <span class="fi fi-{getCountryFlagCode(item.Team_2)}"></span>
-                  {item.Team_2}
-                </div>
-              </div>
-            {/each}
+              {/each}
+            </div>
           </div>
-        </div>
-      {/each}
+        {/each}
+      </Carousel>
     </div>
-  {/if}
+  {/await}
 </main>
 
 <style lang="scss">
   @import "./colors.scss";
+
+  main {
+    max-width: 520px;
+    margin: 0 auto;
+  }
   .select-text {
     width: 100%;
     text-align: center;
     text-transform: uppercase;
-  }
-  .match-item {
-    border: 1px solid $primary;
-    border-radius: 10px;
   }
   .scorelist-item {
     gap: 10px;
@@ -323,26 +157,30 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        border: 1px solid $primary;
+        border-radius: 10px;
+        .match-score {
+          padding-right: 10px;
+        }
         .match-item {
           flex-basis: 50%;
           box-sizing: border-box;
           transition: all .4s ease;
+          justify-content: space-between;
+          align-items: center;
           cursor: pointer;
+          display: flex;
           &:hover {
             background-color: $secondary;
           }
           &:active {
             background-color: $primary;
           }
-          &:not(:last-child) {
-            border-right: 0;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+          &:nth-child(n + 3) {
+            border-top: 1px solid $primary;
           }
-          &:not(:first-child) {
-            border-left: 0;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
+          &:nth-child(odd) {
+            border-right: 1px solid $primary;
           }
         }
       }
@@ -375,5 +213,75 @@
       transform: translatey(0px);
     }
   }
+.lds-grid {
+  margin-top: 40px;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-grid div {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: $primary;
+  animation: lds-grid 1.2s linear infinite;
+}
+.lds-grid div:nth-child(1) {
+  top: 8px;
+  left: 8px;
+  animation-delay: 0s;
+}
+.lds-grid div:nth-child(2) {
+  top: 8px;
+  left: 32px;
+  animation-delay: -0.4s;
+}
+.lds-grid div:nth-child(3) {
+  top: 8px;
+  left: 56px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(4) {
+  top: 32px;
+  left: 8px;
+  animation-delay: -0.4s;
+}
+.lds-grid div:nth-child(5) {
+  top: 32px;
+  left: 32px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(6) {
+  top: 32px;
+  left: 56px;
+  animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(7) {
+  top: 56px;
+  left: 8px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(8) {
+  top: 56px;
+  left: 32px;
+  animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(9) {
+  top: 56px;
+  left: 56px;
+  animation-delay: -1.6s;
+}
+@keyframes lds-grid {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 
 </style>
