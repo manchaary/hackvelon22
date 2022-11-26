@@ -195,15 +195,14 @@
   let winnerTeam: string | null = null;
   let prediction = null;
   let isLoading = false;
-  let data = null;
   let dates = Object.keys(d).sort((a, b) => {
       const dateA = parse(a, dateFormat, new Date());
       const dateB = parse(b, dateFormat, new Date());
       return dateB.getTime() - dateA.getTime();
     });;
-
+    
+  let data = getMatches();
   const setData = async () => {
-    data = await getMatches();
     console.log(data);
     dates = Object.keys(dates).sort((a, b) => {
       const dateA = parse(a, dateFormat, new Date());
@@ -211,7 +210,7 @@
       return dateB.getTime() - dateA.getTime();
     });
   }
-
+  console.log(data);
   const getPrediciton = async () => {
     isLoading = true;
     prediction = await getPrediction(`${teamA},${teamB}`);
