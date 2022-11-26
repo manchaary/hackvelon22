@@ -1,5 +1,6 @@
-import { countryToAlpha2 } from "country-to-iso";
+// const { countryToAlpha2 } = require("country-to-iso");
 
 export const getCountryFlagCode = (countryName) => {
-  return countryToAlpha2(countryName).toLowerCase() || "xx";
+  return "us";
+  // return countryToAlpha2(countryName).toLowerCase() || "xx";
 };

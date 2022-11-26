@@ -1,9 +1,62 @@
 diff --git a/node_modules/country-to-iso/src/country-to-code.ts b/node_modules/country-to-iso/src/country-to-code.ts
-index 6e7a963..677cbaa 100644
+index 6e7a963..645cb14 100644
 --- a/node_modules/country-to-iso/src/country-to-code.ts
 +++ b/node_modules/country-to-iso/src/country-to-code.ts
-@@ -1,3 +1,4 @@
-+declare var require: any;
+@@ -1,10 +1,10 @@
  import { latinize } from "./utils/latinize";
  import { normalize, removeSpaces } from "./utils/strings";
  
+-const alpha2s = require("../data/iso-alpha-2.json");
+-const alpha3s = require("../data/iso-alpha-3.json");
+-const alpha23s = require("../data/iso-alpha-2-to-3.json");
+-const names = require("../data/names.json");
++import { default as alpha2s } from "../data/iso-alpha-2.json";
++import { default as alpha3s } from "../data/iso-alpha-3.json";
++import { default as alpha23s } from "../data/iso-alpha-2-to-3.json";
++import { default as names } from "../data/names.json";
+ 
+ /**
+  * Convert almost anything to an ISO 3166-1 alpha-2 code.
+@@ -24,17 +24,22 @@ export const countryToAlpha2 = (str: any) : string|null  => {
+   }
+ 
+   // Already ISO 3166 alpha 2
++  // @ts-ignore
+   if (country.length === 2 && alpha2s.includes(country)) {
+     return country;
+   }
+ 
+   // Is ISO 3166 alpha 3
++  // @ts-ignore
+   if (country.length === 3 && alpha3s[country]) {
++    // @ts-ignore
+     return alpha3s[country];
+   }
+ 
+   // Exact match
++  // @ts-ignore
+   if (names[country]) {
++    // @ts-ignore
+     return names[country];
+   }
+ 
+@@ -50,6 +55,7 @@ export const countryToAlpha2 = (str: any) : string|null  => {
+   const alpha2 = countryToAlpha2(str);
+ 
+   if (alpha2) {
++    // @ts-ignore
+     return alpha23s[alpha2];
+   }
+ 
+diff --git a/node_modules/country-to-iso/tsconfig.json b/node_modules/country-to-iso/tsconfig.json
+index 633c002..ad81847 100644
+--- a/node_modules/country-to-iso/tsconfig.json
++++ b/node_modules/country-to-iso/tsconfig.json
+@@ -4,6 +4,7 @@
+     "module": "ES2020",
+     "strict": true,
+     "esModuleInterop": true,
++    "resolveJsonModule": true,
+     "forceConsistentCasingInFileNames": true,
+     "outDir": "./lib/esm",
+     "moduleResolution": "node",
