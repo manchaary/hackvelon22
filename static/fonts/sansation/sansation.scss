@@ -1,0 +1,53 @@
+@font-face {
+  font-family: "Sansation";
+  src: url("/static/fonts/sansation/SansationLight.woff2") format("woff2"),
+    url("/static/fonts/sansation/SansationLight.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sansation";
+  src: url("/static/fonts/sansation/SansationRegular.woff2") format("woff2"),
+    url("/static/fonts/sansation/SansationRegular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sansation";
+  src: url("/static/fonts/sansation/SansationItalic.woff2") format("woff2"),
+    url("/static/fonts/sansation/SansationItalic.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sansation";
+  src: url("/static/fonts/sansation/SansationBoldItalic.woff2") format("woff2"),
+    url("/static/fonts/sansation/SansationBoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sansation";
+  src: url("/static/fonts/sansation/SansationLightItalic.woff2") format("woff2"),
+    url("/static/fonts/sansation/SansationLightItalic.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sansation";
+  src: url("/static/fonts/sansation/SansationBold.woff2") format("woff2"),
+    url("/static/fonts/sansation/SansationBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
